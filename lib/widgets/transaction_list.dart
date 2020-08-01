@@ -4,70 +4,69 @@ import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
-  TransactionList(this.transactions);
+  final Function deleteTx;
+  TransactionList(this.transactions, this.deleteTx);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       child: transactions.isEmpty
           ? Column(
               children: <Widget>[
-                Text("No transactions added yet"),
+                Text(
+                  "No transactions added yet",
+                  style: TextStyle(color: Colors.white),
+                ),
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 270,
-                  child: Image.asset(
-                    'assets/images/no-transation-favicon.png',
-                    fit: BoxFit.cover,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 250,
+                      child: Image.asset(
+                        'assets/images/no-transation-favicon.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             )
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                  // elevation: 5,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color(0xFF051937), width: 2)),
-                        padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                        child: Text(
-                          'Rs. ${transactions[index].amount.toStringAsFixed(2)}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: const Color(0xFF051937)),
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: const Color(0xFFED213A),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FittedBox(
+                          child: Text(
+                            '\u20B9 ${transactions[index].amount}',
+                            style: TextStyle(
+                                color: const Color(0xFF0F0C29),
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            transactions[index].title,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF051937)),
-                          ),
-                          Text(
-                            DateFormat().format(transactions[index].date),
-                            // transation.date.toString(),
-                            style: TextStyle(color: const Color(0xFF848d9c)),
-                          ),
-                        ],
-                      )
-                    ],
+                    ),
+                    title: Text('${transactions[index].title}'),
+                    subtitle: Text(
+                      DateFormat.yMMMd().format(transactions[index].date),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () => deleteTx(transactions[index].id),
+                    ),
                   ),
                 );
               },

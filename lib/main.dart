@@ -45,11 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
     //     id: 'T1', title: 'Lunch box', amount: 345.99, date: DateTime.now())
   ];
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime choosenDate) {
     final newTx = Transaction(
         title: txTitle,
         amount: txAmount,
-        date: DateTime.now(),
+        date: choosenDate,
         id: DateTime.now().toString());
 
     setState(() {
@@ -81,6 +82,14 @@ class _MyHomePageState extends State<MyHomePage> {
     ).toList();
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) {
+        return tx.id == id;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,6 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -120,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Chart(_recentTransactions),
-              TransactionList(_userTransactions),
+              TransactionList(_userTransactions, _deleteTransaction),
             ],
           ),
         ),
