@@ -116,8 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           decoration: BoxDecoration(
             gradient: LinearGradient(
